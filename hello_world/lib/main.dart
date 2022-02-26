@@ -1,72 +1,108 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(new MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "My App",
-      home: MyAppHome(),
-      theme: new ThemeData(
-        primarySwatch: Colors.amber,
-        brightness: Brightness.light,
-        accentColor: Colors.red
-      ),
+    return new MaterialApp(
+      title: 'My App',
+      home: new LoginPage(),
+      theme: new ThemeData(primarySwatch: Colors.blue),
     );
   }
 }
 
-class MyAppHome extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _MyAppHomeState createState() => _MyAppHomeState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MyAppHomeState extends State<MyAppHome> {
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+  late AnimationController _iconAnimationController;
+  late Animation<double> _iconAnimation;
 
-  String text = "Title for this app";
-  int i=0;
-
-  void _changeText(){
-    setState(() {
-      text = "Text is changed for"+ " " + "$i" + " time";
-      i++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    _iconAnimationController = new AnimationController(
+        vsync: this, duration: new Duration(milliseconds: 500));
+    _iconAnimation = new CurvedAnimation(
+      parent: _iconAnimationController,
+      curve: Curves.bounceOut,
+    );
+    _iconAnimation.addListener(() => this.setState(() {}));
+    _iconAnimationController.forward();
   }
-  
-  Widget _homeapp(){
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: new Center(
-        child: new Column(
+
+  Widget AppBody() {
+    return new Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        new Image(
+          image: new AssetImage("assets/Background.jpg"),
+          fit: BoxFit.cover,
+          color: Colors.black87,
+          colorBlendMode: BlendMode.darken,
+        ),
+        new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              text
+            new FlutterLogo(
+              size: _iconAnimation.value * 100,
+            ),
+            new Form(
+              child: Theme(
+                data: new ThemeData(
+                    brightness: Brightness.dark,
+                    primarySwatch: Colors.teal,
+                    inputDecorationTheme: new InputDecorationTheme(
+                        labelStyle:
+                            TextStyle(color: Colors.teal, fontSize: 20.0))),
+                child: Container(
+                  padding: const EdgeInsets.all(40.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      new TextFormField(
+                        decoration:
+                            new InputDecoration(labelText: "Enter email"),
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      new TextFormField(
+                        decoration:
+                            new InputDecoration(labelText: "Enter Password"),
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                      ),
+                      new Padding(padding: const EdgeInsets.only(top: 20.0)),
+                      new MaterialButton(
+                          height: 40.0,
+                          minWidth: 100.0,
+                          onPressed: () => {},
+                          color: Colors.teal,
+                          splashColor: Colors.red,
+                          textColor: Colors.white,
+                          child: new Icon(Icons.login)
+                        ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  FloatingActionButton _floatingButton(){
-    return new FloatingActionButton(
-       child: new Icon(Icons.add),
-        onPressed: _changeText,
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(
-        title: Text("My Home App"),
-      ),
-      body: _homeapp(),
-      floatingActionButton: _floatingButton()
+    return new Scaffold(
+      backgroundColor: Colors.black,
+      body: AppBody(),
     );
   }
 }
