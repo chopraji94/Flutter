@@ -15,8 +15,15 @@ class _HomePageState extends State<HomePage> {
 
   void doAddition() {
     setState(() {
-      num1 = int.parse(t1.text);
-      num2 = int.parse(t2.text);
+      if (t1.text.isEmpty) {
+        num1 = 0;
+      } else if (t2.text.isEmpty) {
+        num2 = 0;
+      }
+      else{
+        num1 = int.parse(t1.text);
+        num2 = int.parse(t2.text);
+      }
       sum = num1 + num2;
     });
   }
@@ -46,10 +53,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void ClearField1() {
+    num1 = 0;
     t1.text = "";
   }
 
   void ClearField2() {
+    num2 = 0;
     t2.text = "";
   }
 
