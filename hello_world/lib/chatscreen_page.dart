@@ -32,7 +32,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 decoration:
                     new InputDecoration.collapsed(hintText: "Send a message"),
                 controller: _messageField,
-                onSubmitted: _handleSubmitted,
               ),
             ),
             new Container(
